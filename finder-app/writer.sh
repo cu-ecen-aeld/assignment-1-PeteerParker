@@ -1,29 +1,30 @@
-#!/bin/bash
+#!/bin/sh
 
-# Verify two arguments passed
+# Validate number of arguments
 if [ $# -ne 2 ]; then
-    echo "Error: Two arguments required: writefile writestr"
+    echo "Error: Two arguments required."
+    echo "Usage: $0 writefile writestr"
     exit 1
 fi
 
 writefile="$1"
 writestr="$2"
 
-# Obtein file directory
+# Extract directory path from full file path
 writedir=$(dirname "$writefile")
 
-# Create directory if does not exist
-mkdir -p "$writedir"
-if [ $? -ne 0 ]; then
-    echo "Error: Could not create directory $writedir"
-    exit 1
+# Create directory path if it doesn't exist
+if [ ! -d "$writedir" ]; then
+    mkdir -p "$writedir" || {
+        echo "Error: Could not create directory path $writedir"
+        exit 1
+    }
 fi
 
-# Write the chain in the file
-echo "$writestr" > "$writefile"
-if [ $? -ne 0 ]; then
-    echo "Error: Could not write to file $writefile"
+# Write string to file (overwrite if exists)
+echo "$writestr" > "$writefile" || {
+    echo "Error: Could not create or write to file $writefile"
     exit 1
-fi
+}
 
 exit 0

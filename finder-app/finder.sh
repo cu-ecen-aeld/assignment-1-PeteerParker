@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-# Verify two arguments passed
+# Validate number of arguments
 if [ $# -ne 2 ]; then
-    echo "Error: Two arguments required: filesdir searchstr"
+    echo "Error: Two arguments required."
+    echo "Usage: $0 filesdir searchstr"
     exit 1
 fi
 
@@ -15,10 +16,10 @@ if [ ! -d "$filesdir" ]; then
     exit 1
 fi
 
-# Count number of files in the chain
-num_files=$(grep -rl -- "$searchstr" "$filesdir" 2>/dev/null | wc -l)
+# Count total number of files in the directory tree
+num_files=$(find "$filesdir" -type f | wc -l)
 
-# Count total lines that match
+# Count total lines that match searchstr
 num_lines=$(grep -rn -- "$searchstr" "$filesdir" 2>/dev/null | wc -l)
 
 echo "The number of files are $num_files and the number of matching lines are $num_lines"
